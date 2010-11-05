@@ -65,6 +65,7 @@ var RememberIt = function () { this.initialize(); }; RememberIt.prototype = {
   },
 
   read: function () {
+    $.pageLoading();
     this.table.read(this.query, (function (self) {
       return function (data) {
         self.loaded(data);
@@ -77,5 +78,6 @@ var RememberIt = function () { this.initialize(); }; RememberIt.prototype = {
     this.$word.text(row.getVal('idx', 1) || 'none');
     this.$desc.text(row.getVal('idx', 2) || 'none');
     this.$example.text(row.getVal('idx', 3) || 'none');
+    $.pageLoading('DONE');
   }
 };
