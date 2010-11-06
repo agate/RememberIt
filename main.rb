@@ -5,5 +5,5 @@ get '/' do
 end
 
 get '/m' do
-  haml :mobile
+  redirect '/'
 end
