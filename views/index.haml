@@ -4,6 +4,7 @@
     %meta{'http-equiv' => 'content-type', 'content' => 'text/html; charset=utf-8'}
     %title RememberIt
     %link{:rel => 'stylesheet', type => 'text/css', :href => 'http://code.jquery.com/mobile/1.0a1/jquery.mobile-1.0a1.min.css'}/
+    %link{:rel => 'stylesheet', type => 'text/css', :href => '/stylesheets/index.css'}/
     %script{:src => 'http://code.jquery.com/jquery-1.4.3.min.js', :type => 'text/javascript', :charset => 'utf-8'}
     %script{:src => 'http://code.jquery.com/mobile/1.0a1/jquery.mobile-1.0a1.min.js', :type => 'text/javascript', :charset => 'utf-8'}
     %script{:src => '/javascripts/init.js', :type => 'text/javascript', :charset => 'utf-8'}
@@ -16,6 +17,10 @@
         %a.ui-btn-right{:href => '#settings', 'data-icon' => 'gear'} Settings
       %div{'data-role' => 'content'}
         %h2#word
+        %span#dictcn
+          %span
+          %img{:src => 'http://upload.wikimedia.org/wikipedia/commons/4/47/Sound-icon.svg'}
+          %audio
         %p#desc
         %h3 example sentence
         %p#example

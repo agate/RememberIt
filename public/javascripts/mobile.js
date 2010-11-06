@@ -1,4 +1,4 @@
-$FL.$(function () {
+$(function () {
   new RememberIt();
 });
 
@@ -23,16 +23,19 @@ var RememberIt = function () { this.initialize(); }; RememberIt.prototype = {
 
     this.initHTML();
     this.registerEvents();
-    this.read();
+    this.loadFactualData();
   },
 
   initHTML: function () {
-    this.$word    = $FL.$('#word');
-    this.$desc    = $FL.$('#desc');
-    this.$example = $FL.$('#example');
-
-    this.$prev    = $FL.$('[role=button]').eq(0);
-    this.$next    = $FL.$('[role=button]').eq(1);
+    this.$word      = $('#word');
+    this.$dictcn    = $('#dictcn');
+    this.$pron      = this.$dictcn.find('span:first');
+    this.$audioIcon = this.$dictcn.find('img:first');
+    this.$audio     = this.$dictcn.find('audio:first');
+    this.$desc      = $('#desc');
+    this.$example   = $('#example');
+    this.$prev      = $('[role=button]').eq(0);
+    this.$next      = $('[role=button]').eq(1);
   },
 
   registerEvents: function () {
@@ -46,6 +49,12 @@ var RememberIt = function () { this.initialize(); }; RememberIt.prototype = {
         self.next();
       };
     })(this));
+    this.$audioIcon.click((function (self) {
+      return function () {
+        self.play();
+      };
+    })(this));
+
   },
 
   prev: function () {
@@ -56,28 +65,63 @@ var RememberIt = function () { this.initialize(); }; RememberIt.prototype = {
       return;
     }
 
-    this.read();
+    this.loadFactualData();
   },
 
   next: function () {
     this.query.offset += 1;
-    this.read();
+    this.loadFactualData();
   },
 
-  read: function () {
+  play: function () {
+    this.$audio[0].load();
+    this.$audio[0].play();
+  },
+
+  loadFactualData: function () {
     $.pageLoading();
     this.table.read(this.query, (function (self) {
-      return function (data) {
-        self.loaded(data);
+      return function (factualData) {
+        self.factualDataLoaded(factualData);
       };
     })(this));
   },
 
-  loaded: function (data) {
-    var row = data.getRow(0);
-    this.$word.text(row.getVal('idx', 1) || 'none');
-    this.$desc.text(row.getVal('idx', 2) || 'none');
-    this.$example.text(row.getVal('idx', 3) || 'none');
+  factualDataLoaded: function (factualData) {
+    var row          = factualData.getRow(0);
+    this.factualData = {
+      word:    row.getVal('idx', 1) || 'none',
+      desc:    row.getVal('idx', 2) || 'none',
+      example: row.getVal('idx', 3) || 'none'
+    };
+
+    if ($.trim(this.factualData.word).match(/^\w+$/)) {
+      this.loadDictcnData();
+    } else {
+      this.dictcnDataLoaded();
+    }
+  },
+
+  loadDictcnData: function () {
+    $.get('/dictcn', { q:this.factualData.word }, (function (self) {
+      return function (dictcnData) {
+        self.dictcnDataLoaded(dictcnData);
+      };
+    })(this));
+  },
+
+  dictcnDataLoaded: function (dictcnData) {
+    if (dictcnData) {
+      var $data = $(dictcnData);
+      this.$pron.text('/' + $data.find('pron').html() + '/');
+      this.$audio.attr('src', $data.find('audio').html());
+      this.$dictcn.show();
+    } else {
+      this.$dictcn.hide();
+    }
+    this.$word.text(this.factualData.word);
+    this.$desc.text(this.factualData.desc);
+    this.$example.text(this.factualData.example);
     $.pageLoading('DONE');
   }
 };
