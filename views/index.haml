@@ -10,11 +10,11 @@
     %script{:src => 'http://www.factual.com/javascripts/jsapiv2_packaged.js', :type => 'text/javascript', :charset => 'utf-8'}
     %script{:src => '/javascripts/mobile.js', :type => 'text/javascript', :charset => 'utf-8'}
   %body
-    %div{'data-role' => 'page'}
+    %div{'data-role' => 'page', 'data-theme' => 'c'}
       %div{'data-role' => 'header', 'data-theme' => 'b'}
         %h1 RememberIt
         %a.ui-btn-right{:href => '#settings', 'data-icon' => 'gear'} Settings
-      %div{'data-role' => 'content', 'data-theme' => 'c'}
+      %div{'data-role' => 'content'}
         %h2#word
         %p#desc
         %h3 example sentence
@@ -24,8 +24,8 @@
             %button{'data-role' => "button", 'data-icon' => 'arrow-l', 'data-theme' => 'c'} Prev
           .ui-block-b
             %button{'data-role' => "button", 'data-icon' => 'arrow-r', 'data-theme' => 'b'} Next
-    %div#settings{'data-role' => 'page'}
+    %div#settings{'data-role' => 'page', 'data-theme' => 'c'}
       %div{'data-role' => 'header', 'data-theme' => 'b'}
         %h1 Settings
-      %div{'data-role' => 'content', 'data-theme' => 'c'}
+      %div{'data-role' => 'content'}
         Settings is currently in-progress.
